@@ -1,4 +1,21 @@
-Onchain Wallet Verifier
+هProblem
+Sybil attacks and fake wallet identities undermine trust in Web3 applications such as airdrops, DAO voting, and authentication systems.
+Most existing solutions rely on KYC or invasive identity checks, which contradict Web3 values.
+💡 Solution
+Onchain Wallet Verifier provides a privacy-preserving, KYC-free way to verify wallet ownership and derive a basic reputation signal using onchain data and cryptographic signatures.
+🛠️ How it Works
+Message signing (EIP-191 / EIP-712)
+Signature verification (no private keys stored)
+Onchain analysis (wallet age, tx count, interactions)
+Simple API response with verification + score
+🌍 Impact
+Fair airdrops
+Sybil-resistant DAO voting
+Web3 login without Google/KYC
+Open infrastructure for developers
+🚀 Why Open Source
+Trust infrastructure must be transparent and auditable.
+This project is MIT-licensed and designed to be extended by the ecosystem.Onchain Wallet Verifier
 
 Open infrastructure to verify wallet ownership and basic onchain reputation — without KYC.
 
@@ -92,3 +109,172 @@ Reputation-based access control
 [ ] Hosted API
 🤝 Contributing
 Open to contributors and collaborators.
+Onchain Wallet Verifier
+Privacy-first wallet verification & onchain reputation — without KYC
+🚀 What is this?
+Onchain Wallet Verifier is an open-source infrastructure that proves wallet ownership and returns a basic onchain reputation score, without collecting identities or using KYC.
+It answers one core question in Web3:
+“Is this a real wallet controlled by a real user — without knowing who they are?”
+❌ The Problem
+Web3 suffers from:
+Sybil attacks (fake wallets farming rewards)
+Unfair airdrops
+Weak DAO voting systems
+Centralized Web2 logins replacing decentralization
+Most current solutions rely on KYC, social graphs, or invasive tracking — which breaks Web3 principles.
+✅ The Solution
+Onchain Wallet Verifier uses:
+Cryptographic signatures (no private keys shared)
+Pure onchain data
+Transparent scoring logic
+To provide:
+Wallet ownership verification
+Lightweight reputation signal
+Privacy-preserving trust
+🧠 How It Works
+User signs a message (EIP-191 / EIP-712)
+Server verifies signature
+Onchain activity is analyzed
+API returns:
+verified: true | false
+score: 0–100
+reputation details
+🔌 API Example
+POST /verify
+نسخ التعليمات البرمجية
+Json
+{
+  "address": "0x...",
+  "message": "Sign to verify",
+  "signature": "0x..."
+}
+Response:
+نسخ التعليمات البرمجية
+Json
+{
+  "verified": true,
+  "score": 72,
+  "details": {
+    "walletAgeDays": 420,
+    "txCount": 133
+  }
+}
+🌍 Use Cases
+Fair airdrops
+Sybil-resistant DAO voting
+Web3 login (Sign-in-with-wallet)
+Reputation gating for dApps
+Grant & community tooling
+🛠 Supported Networks
+Ethereum
+Base
+(EVM-compatible, multi-chain ready)
+🧩 Why This Matters
+No KYC
+No identity leakage
+No central authority
+Fully auditable
+Developer-first API
+This is infrastructure, not an app.
+🧭 Roadmap
+Replay protection (nonce)
+Multi-chain scoring
+Reputation weighting
+SDK (JS)
+Hosted API option
+🤝 Open Source & Grants
+This project is MIT-licensed and designed for ecosystem adoption.
+Ideal for grants focused on:
+Privacy
+Sybil resistance
+Web3 infrastructure
+DAO tooling
+📬 Contact / Contribution
+Issues, PRs, and ecosystem collaborations are welcome.Grant Proposal — Onchain Wallet Verifier
+Project Name
+Onchain Wallet Verifier
+Category
+Web3 Infrastructure · Privacy · Sybil Resistance · DAO Tooling
+Problem Statement
+Web3 ecosystems suffer heavily from Sybil attacks, where a single user controls many wallets to exploit:
+Airdrops
+Grants
+DAO voting
+Incentive programs
+Current solutions often rely on:
+KYC and identity verification
+Social graph analysis
+Centralized identity providers
+These approaches violate Web3 principles by introducing privacy risks, exclusion, and central points of failure.
+Proposed Solution
+Onchain Wallet Verifier is an open-source infrastructure that:
+Cryptographically verifies wallet ownership
+Analyzes onchain behavior
+Returns a lightweight reputation score
+Requires no KYC and no identity data
+It enables trust without identity disclosure.
+How It Works
+User signs a message using their wallet (EIP-191 / EIP-712)
+Backend verifies signature ownership
+Onchain data is analyzed (age, tx count, interactions)
+API returns:
+Verification result
+Reputation score (0–100)
+Transparent metrics
+Why This Is Needed
+DAOs need fair voting
+Protocols need Sybil resistance
+Airdrops need fairness
+Web3 logins need alternatives to Web2 OAuth
+This project provides a neutral trust primitive for Web3.
+Target Users
+DAO platforms
+DeFi & NFT protocols
+Grant programs
+Web3 authentication systems
+Ecosystem tooling builders
+Technical Stack
+Node.js + TypeScript
+Express
+ethers.js
+EVM-compatible chains
+Fully open-source, auditable, and composable.
+Roadmap
+Phase 1 (Current)
+Wallet signature verification
+Basic reputation scoring
+Public API
+Phase 2
+Nonce & replay protection
+Multi-chain scoring
+Weighting logic
+Phase 3
+JS SDK
+Hosted API option
+DAO-specific integrations
+Expected Impact
+Reduced Sybil exploitation
+Increased fairness in ecosystem incentives
+Privacy-preserving trust infrastructure
+Broader adoption of non-KYC solutions
+Open Source Commitment
+MIT License
+Public roadmap
+Community-driven development
+Funding Usage
+Grant funding will be used for:
+Core protocol development
+Security hardening
+Documentation & SDKs
+Community testing & feedback
+Long-Term Vision
+To become a standard, privacy-first wallet verification layer used across Web3 ecosystems.
+Not an app.
+Not a gatekeeper.
+But infrastructure.
+frontend/
+ ├─ index.html
+ ├─ main.jsx
+ └─ package.json
+
+
