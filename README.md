@@ -75,3 +75,20 @@ git clone https://github.com/alialkhtri3-png/onchain-wallet-verifier.git
 cd onchain-wallet-verifier
 npm install
 npm run dev
+Message signing only
+No private keys stored
+No KYC
+Stateless verification
+🧠 Use Cases
+Sybil-resistant airdrops
+DAO voting eligibility
+Web3 login (Sign-in with Wallet)
+Reputation-based access control
+🚀 Roadmap
+[ ] Nonce-based replay protection
+[ ] Multi-chain support
+[ ] Reputation weighting
+[ ] SDK (JS)
+[ ] Hosted API
+🤝 Contributing
+Open to contributors and collaborators.
