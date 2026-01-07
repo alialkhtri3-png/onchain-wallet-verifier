@@ -59,31 +59,19 @@ Request:
   "address": "0x...",
   "signature": "0x...",
   "message": "..."
-}
-الاستجابة
-نسخ التعليمات البرمجية
 Json
 {
   "verified": true,
   "score": 72,
   "details": {
     "walletAgeDays": 420,
-    "txCount": 133
-  }
-}
-### ماذا سيحدث بعد اللصق؟
-- ✅ المعاينة ستصير نظيفة
-- ✅ لا تكرار
-- ✅ README احترافي وجاهز للعرض على:
-  - DAOs  
-  - Grants  
-  - Builders  
-  - Reviewers  
+    "txCount"
+- 
+-
+## Quick Start
 
-🔥 **ملاحظة مهمة**:  
-وجود README بهذا المستوى + فكرتك = مشروع **قابل للتمويل** فعليًا.
-
-لو تحب:
-- أضيف لك **Roadmap ذكي**
-- أو **Quick Start للمطورين**
-- أو نبدأ مباشرة **بكتابة أول endpoint
+```bash
+git clone https://github.com/alialkhtri3-png/onchain-wallet-verifier.git
+cd onchain-wallet-verifier
+npm install
+npm run dev
