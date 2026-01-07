@@ -49,3 +49,25 @@ Request:
     "txCount": 133
   }> هذه النتيجة تُستخدم كإشارة ثقة أولية بدون كشف الهوية أو KYC.
 }
+## مثال على واجهة برمجة التطبيقات
+
+**POST** `/verify`
+
+### الطلب
+```json
+{
+  "address": "0x...",
+  "signature": "0x...",
+  "message": "..."
+}
+الاستجابة
+نسخ التعليمات البرمجية
+Json
+{
+  "verified": true,
+  "score": 72,
+  "details": {
+    "walletAgeDays": 420,
+    "txCount": 133
+  }
+}
