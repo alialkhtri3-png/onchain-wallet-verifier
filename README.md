@@ -48,24 +48,54 @@ POST `/verify`
   }
 }---
 
-## 🧠 بالعربي (الخلاصة)
-هذا المشروع **مش تطبيق عادي**  
-هذا **بنية تحتية**:  
-> يثبت إن الشخص يملك المحفظة  
-> ويعطي ثقة مبدئية بدون KYC  
+# Onchain Wallet Verifier
 
-وهذا بالضبط اللي:
-- المنح تحبه  
-- الـ DAOs تحتاجه  
-- السوق يدفع له  
+Open infrastructure to verify wallet ownership and basic onchain reputation — without KYC.
 
----
+## What it does
+Onchain Wallet Verifier confirms that a user controls a wallet and returns a simple reputation signal based on onchain activity.
 
-## الخطوة الجاية (نختار وحدة ونبدأ فورًا)
-اكتب رقم الخيار فقط:
+## Why it matters
+Web3 needs trust without identity leakage.  
+This tool helps:
+- Prevent Sybil attacks
+- Enable fair airdrops
+- Secure DAO voting
+- Power Web3 authentication without Google or KYC
 
-**1️⃣ تصميم API النهائي (Endpoints + logic)**  
-**2️⃣ هيكلة المشروع (Folders + Stack)**  
-**3️⃣ سكربت التحقق والتوقيع (Core logic)**  
+## How it works
+1. User signs a message (EIP-191 / EIP-712)
+2. Signature is verified
+3. Onchain data is analyzed
+4. A verification result and score are returned
 
-أنا جاهز نكمله حبة حبة 💪
+## Supported Networks
+- Ethereum
+- Base (EVM compatible)
+
+## Reputation Signals (MVP)
+- Wallet age
+- Transaction count
+- Contract interactions
+- ENS (optional)
+
+## API Example
+**POST** `/verify`
+
+Request:
+```json
+{
+  "address": "0x...",
+  "signature": "0x...",
+  "message": "..."
+}
+Response:
+Json
+{
+  "verified": true,
+  "score": 72,
+  "details": {
+    "walletAgeDays": 420,
+    "txCount": 133
+  }
+}
