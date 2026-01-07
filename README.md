@@ -39,3 +39,13 @@ Request:
   "signature": "0x...",
   "message": "..."
 }
+استجابة:
+```json
+{
+  "verified": true,
+  "score": 72,
+  "details": {
+    "walletAgeDays": 420,
+    "txCount": 133
+  }> هذه النتيجة تُستخدم كإشارة ثقة أولية بدون كشف الهوية أو KYC.
+}
