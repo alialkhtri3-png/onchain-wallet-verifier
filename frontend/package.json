@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "ethers": "^6.16.0",
+    "express-session": "^1.18.2",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "siwe": "^3.0.0"

@@ -1,9 +1,23 @@
-# dependencies
-node_modules
-**/node_modules
+# Node
+node_modules/
+npm-debug.log*
+yarn-error.log*
 
-# env
+# Env
 .env
+.env.local
 
-# build output
-dist
+# Build
+dist/
+build/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+
+# OS
+.DS_Store
+
+# TS
+*.tsbuildinfo
+
