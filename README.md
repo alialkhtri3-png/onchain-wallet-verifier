@@ -1,3 +1,19 @@
+onchain-wallet-verifier/
+│
+├─ src/
+│   ├─ index.ts        ← backend (SIWE + session)
+│   └─ types/
+│       └─ express-session.d.ts
+│
+├─ frontend/
+│   ├─ src/
+│   │   └─ App.jsx     ← frontend (MetaMask + SIWE)
+│   └─ package.json
+│
+├─ tsconfig.json
+├─ package.json
+└─ .gitignore
+
 هProblem
 Sybil attacks and fake wallet identities undermine trust in Web3 applications such as airdrops, DAO voting, and authentication systems.
 Most existing solutions rely on KYC or invasive identity checks, which contradict Web3 values.
