@@ -292,5 +292,19 @@ frontend/
  ├─ index.html
  ├─ main.jsx
  └─ package.json
-
+onchain-wallet-verifier/
+│
+├─ src/
+│   ├─ index.ts        # Backend (SIWE + sessions)
+│   └─ types/
+│       └─ express-session.d.ts
+│
+├─ frontend/
+│   ├─ src/
+│   │   └─ App.jsx     # Frontend (MetaMask + SIWE)
+│   └─ package.json
+│
+├─ tsconfig.json
+├─ package.json
+└─ .gitignore
 
