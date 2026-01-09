@@ -1,15 +1,29 @@
 import express from "express";
 import cors from "cors";
-import crypto from "crypto";
 import session from "express-session";
 import { SiweMessage } from "siwe";
+import crypto from "crypto";
+
+/* 🔹 توسيع express-session */
+declare module "express-session" {
+  interface SessionData {
+    nonce?: string;
+    siwe?: {
+      address: string;
+      chainId: number;
+      domain: string;
+      issuedAt?: string;
+      nonce: string;
+    };
+  }
+}
 
 const app = express();
+const PORT = 3000;
 
-// مهم
-app.set("trust proxy", 1);
-
+/* 🔹 Middlewares */
 app.use(express.json());
+
 app.use(
   cors({
     origin: true,
@@ -20,64 +34,73 @@ app.use(
 app.use(
   session({
     name: "siwe-session",
-    secret: "dev-secret-key",
+    secret: "super-secret-key",
     resave: false,
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
+      secure: false, // اجعلها true فقط مع HTTPS
       sameSite: "lax",
     },
   })
 );
 
-// ===== routes =====
-
-// nonce
+/* 🔹 إنشاء nonce */
 app.get("/nonce", (req, res) => {
   const nonce = crypto.randomBytes(16).toString("hex");
-  (req.session as any).nonce = nonce;
+  req.session.nonce = nonce;
   res.json({ nonce });
 });
 
-// verify
+/* 🔹 التحقق من التوقيع */
 app.post("/verify", async (req, res) => {
   try {
     const { message, signature } = req.body;
 
-    const siwe = new SiweMessage(message);
-    const fields = await siwe.verify({
+    if (!req.session.nonce) {
+      return res.status(400).json({ success: false, error: "No nonce in session" });
+    }
+
+    const siweMessage = new SiweMessage(message);
+
+    const fields = await siweMessage.verify({
       signature,
-      nonce: (req.session as any).nonce,
+      nonce: req.session.nonce,
     });
 
-    (req.session as any).user = {
+    req.session.siwe = {
       address: fields.data.address,
       chainId: fields.data.chainId,
+      domain: fields.data.domain,
+      issuedAt: fields.data.issuedAt,
+      nonce: fields.data.nonce,
     };
 
-    res.json({ success: true });
+    req.session.nonce = undefined;
+
+    res.json({
+      success: true,
+      address: fields.data.address,
+    });
   } catch (err) {
+    console.error("SIWE verify error:", err);
     res.status(401).json({ success: false });
   }
 });
 
-// me
+/* 🔹 حالة تسجيل الدخول */
 app.get("/me", (req, res) => {
-  const user = (req.session as any).user;
-  if (!user) {
-    return res.status(401).json({ loggedIn: false });
+  if (!req.session.siwe) {
+    return res.json({ loggedIn: false });
   }
-  res.json({ loggedIn: true, user });
-});
 
-// logout
-app.post("/logout", (req, res) => {
-  req.session.destroy(() => {
-    res.json({ success: true });
+  res.json({
+    loggedIn: true,
+    address: req.session.siwe.address,
   });
 });
 
-app.listen(3000, () => {
-  console.log("🚀 Onchain Wallet Verifier running on port 3000");
+/* 🔹 تشغيل السيرفر */
+app.listen(PORT, () => {
+  console.log(`🚀 Onchain Wallet Verifier running on port ${PORT}`);
 });
-

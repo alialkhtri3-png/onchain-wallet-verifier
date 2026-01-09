@@ -1,0 +1,21 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "ethers": "^6.16.0",
+    "express": "^5.2.1",
+    "keccak256": "^1.0.6",
+    "merkletreejs": "^0.6.0",
+    "siwe": "^3.0.0"
+  }
+}
