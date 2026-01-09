@@ -307,4 +307,5 @@ onchain-wallet-verifier/
 ├─ tsconfig.json
 ├─ package.json
 └─ .gitignore
-
+SIWE Authentication Demo for Base (EVM)
+Secure nonce generation, verification, and replay protection.
