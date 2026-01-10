@@ -321,3 +321,15 @@ The flow:
 4. The signature is verified to prove wallet ownership
 
 This repository is intended as a reference implementation and learning demo.
+## 👤 Project Identity & Ownership
+
+The author and maintainer of this project is verified using a W3C DID (Decentralized Identifier).
+
+- **DID Web:** `did:web:ali.cb.id`
+- **Network:** Base (Chain ID 8453)
+- **Wallet:** `0xB45A7510EaaD1Ef02CFaD55C67c0EA084CDD40d2`
+
+The DID document is publicly available at:
+https://ali.cb.id/.well-known/did.json
+
+This proves that the project, the domain, and the wallet are controlled by the same entity.
