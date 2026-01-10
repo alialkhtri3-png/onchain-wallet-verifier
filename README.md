@@ -309,3 +309,15 @@ onchain-wallet-verifier/
 └─ .gitignore
 SIWE Authentication Demo for Base (EVM)
 Secure nonce generation, verification, and replay protection.
+## 🔐 Wallet Ownership Verification
+
+This project demonstrates how to verify EVM wallet ownership using cryptographic
+signatures.
+
+The flow:
+1. User connects an EVM wallet
+2. The app generates a message
+3. The user signs the message
+4. The signature is verified to prove wallet ownership
+
+This repository is intended as a reference implementation and learning demo.
