@@ -333,3 +333,65 @@ The DID document is publicly available at:
 https://ali.cb.id/.well-known/did.json
 
 This proves that the project, the domain, and the wallet are controlled by the same entity.
+Onchain Wallet Verifier
+A ready-made API to cryptographically prove wallet ownership.
+No private keys. No transactions. No auth system.
+Just sign a message → verify ownership.
+What this does
+Many teams don’t need full Web3 auth.
+They just want a simple, reliable way to prove that a user owns a wallet.
+This service provides exactly that.
+How it works (SIWE-style)
+Backend generates a nonce
+User signs the message with their wallet
+Backend verifies the signature
+You get confirmed wallet ownership
+That’s it.
+Why teams use this
+✅ No private keys
+✅ No permissions
+✅ No transactions
+✅ No funds access
+✅ Chain-agnostic logic
+✅ Works with existing apps
+Perfect for:
+Web3 apps
+NFT gating
+Account linking
+Proof-of-ownership flows
+Internal tools
+API Overview
+GET /nonce
+Returns a unique nonce for the wallet to sign.
+Response
+نسخ التعليمات البرمجية
+Json
+{ "nonce": "uuid-string" }
+POST /verify
+Verifies the signed message and confirms wallet ownership.
+Input
+wallet address
+message
+signature
+Output
+verified: true / false
+recovered address
+Status
+✅ Working MVP
+✅ Used in real integration
+🚧 SaaS & hosted version coming soon
+Looking for integration?
+We offer:
+Setup & integration
+Customization
+Early access hosting
+📩 Contact: via GitHub / Telegram
+Philosophy
+Most developers don’t need auth —
+they just need to know who owns the wallet.
+بعد ما تحطه README ⏭️
+اعمل 3 أشياء بس:
+1️⃣ احفظ الرابط
+نسخ التعليمات البرمجية
+
+https://github.com/alialkhtri3-png/onchain-wallet-verifier

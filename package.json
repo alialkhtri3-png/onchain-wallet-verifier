@@ -2,12 +2,9 @@
   "name": "onchain-wallet-verifier",
   "version": "1.0.0",
   "description": "Onchain Wallet Verifier",
-  "type": "commonjs",
-  "main": "dist/index.js",
+  "main": "index.js",
   "scripts": {
-    "dev": "ts-node --files src/index.ts",
-    "build": "tsc",
-    "start": "node dist/index.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -16,19 +13,17 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "type": "commonjs",
   "bugs": {
     "url": "https://github.com/alialkhtri3-png/onchain-wallet-verifier/issues"
   },
   "homepage": "https://github.com/alialkhtri3-png/onchain-wallet-verifier#readme",
   "dependencies": {
-    "@tanstack/react-query": "^5.90.16",
     "cors": "^2.8.5",
     "ethers": "^6.16.0",
     "express": "^5.2.1",
     "express-session": "^1.18.2",
-    "siwe": "^3.0.0",
-    "viem": "^2.44.1",
-    "wagmi": "^3.3.1"
+    "siwe": "^3.0.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
