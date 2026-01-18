@@ -1,99 +1,72 @@
-
-import { useEffect, useState } from "react";
-import { ethers } from "ethers";
+import express from "express";
+import cors from "cors";
+import crypto from "crypto";
+import cookieParser from "cookie-parser";
 import { SiweMessage } from "siwe";
+import { createPublicClient, http } from "viem";
+import { mainnet } from "viem/chains";
 
-const BACKEND = "http://10.53.52.174:3002";
+const app = express()
+const PORT = 3333;
 
-function App() {
-  const [address, setAddress] = useState("");
-  const [nonce, setNonce] = useState("");
-  const [status, setStatus] = useState("");
+app.use(express.json());
+app.use(cookieParser());
 
-  // 1️⃣ جلب nonce
-  const fetchNonce = async () => {
-    const res = await fetch(`${BACKEND}/nonce`);
-    const data = await res.json();
-    setNonce(data.nonce);
-  };
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "http://192.168.1.100:5173",
+    ],
+    credentials: true,
+  })
+);
 
-  // 2️⃣ اتصال MetaMask
-  const connectWallet = async () => {
-    if (!window.ethereum) {
-      alert("MetaMask غير مثبت");
-      return;
-    }
+// ===== ENS client =====
+const client = createPublicClient({
+  chain: mainnet,
+  transport: http(),
+});
 
-    const provider = new ethers.BrowserProvider(window.ethereum);
-    const signer = await provider.getSigner();
-    const addr = await signer.getAddress();
-
-    setAddress(addr);
-    await fetchNonce();
-  };
-
-  // 3️⃣ توقيع SIWE
-  const signInWithEthereum = async () => {
-    const provider = new ethers.BrowserProvider(window.ethereum);
-    const signer = await provider.getSigner();
-
-    const message = new SiweMessage({
-      domain: window.location.host,
-      address,
-      statement: "Sign in with Ethereum",
-      uri: window.location.origin,
-      version: "1",
-      chainId: 1,
-      nonce,
-    });
-
-    const signature = await signer.signMessage(
-      message.prepareMessage()
-    );
-
-    const res = await fetch(`${BACKEND}/verify`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        message,
-        signature,
-      }),
-    });
-
-    const data = await res.json();
-
-    if (data.ok) {
-      setStatus(`✅ تم التحقق: ${data.address}`);
-    } else {
-      setStatus("❌ فشل التحقق");
-    }
-  };
-
-  return (
-    <div style={{ padding: 20 }}>
-      <h1>SIWE Demo</h1>
-
-      {!address && (
-        <button onClick={connectWallet}>
-          Connect Wallet
-        </button>
-      )}
-
-      {address && (
-        <>
-          <p><b>Address:</b> {address}</p>
-          <p><b>Nonce:</b> {nonce}</p>
-
-          <button onClick={signInWithEthereum}>
-            Sign-In with Ethereum
-          </button>
-        </>
-      )}
-
-      <p>{status}</p>
-    </div>
-  );
+async function resolveENS(address) {
+  return await client.getEnsName({ address });
 }
 
-export default App;
+// ===== nonce =====
+let currentNonce = null;
+
+app.get("/nonce", (req, res) => {
+  currentNonce = crypto.randomUUID();
+  res.json({ nonce: currentNonce });
+});
+
+// ===== verify =====
+app.post("/verify", async (req, res) => {
+  try {
+    const { message, signature } = req.body;
+
+    const siweMessage = new SiweMessage(message);
+    const result = await siweMessage.verify({ signature });
+
+    if (result.data.nonce !== currentNonce) {
+      return res.status(400).json({ ok: false });
+    }
+
+    const address = result.data.address;
+    const ens = await resolveENS(address);
+
+    res.json({
+      ok: true,
+      address,
+      ens,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ ok: false });
+  }
+});
+
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`🚀 Backend running on http://0.0.0.0:${PORT}`);
+});
 

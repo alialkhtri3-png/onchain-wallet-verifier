@@ -1,46 +1,46 @@
-const express = require("express");
-
-const app = express();
-app.use(express.json());
-
-app.post("/verify", async (req, res) => {
-  const { address, signature, message } = req.body;
-
-  if (!address || !signature || !message) {
-    return res.status(400).json({
-      error: "Missing parameters"
-    });
-  }
-
-  // (مؤقتًا) نتيجة وهمية — سنجعلها حقيقية لاحقًا
-  return res.json({
-    verified: true,
-    score: 72,
-    details: {
-      walletAgeDays: 420,
-      txCount: 133
-    }
-  });
-});
-
-app.listen(3000, () => {
-  console.log("🚀 Onchain Wallet Verifier running on port 3000");
-});
-
 import express, { Request, Response } from "express";
+import { ethers } from "ethers";
 
 const app = express();
 app.use(express.json());
 
 app.post("/verify", async (req: Request, res: Response) => {
-  return res.json({
-    verified: true,
-    score: 72,
-    details: {
-      walletAgeDays: 420,
-      txCount: 133
+  const { address, signature, message } = req.body;
+
+  if (!address || !signature || !message) {
+    return res.status(400).json({
+      verified: false,
+      error: "Missing parameters",
+    });
+  }
+
+  try {
+    // التحقق الحقيقي من التوقيع
+    const recoveredAddress = ethers.verifyMessage(message, signature);
+
+    if (recoveredAddress.toLowerCase() !== address.toLowerCase()) {
+      return res.status(401).json({
+        verified: false,
+        error: "Signature does not match address",
+      });
     }
-  });
+
+    return res.json({
+      verified: true,
+      address: recoveredAddress,
+      score: 100,
+      details: {
+        signatureValid: true,
+      },
+    });
+
+  } catch (err: any) {
+    return res.status(500).json({
+      verified: false,
+      error: "Verification failed",
+      details: err.message,
+    });
+  }
 });
 
 const PORT = 3000;

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ethers } from "ethers";
 import { SiweMessage } from "siwe";
 
-const BACKEND_URL = "http://192.168.1.100:3001"; // عدّل IP إذا تغيّر
+const BACKEND_URL = "http://192.168.1.100:3000";
 
 function App() {
   const [address, setAddress] = useState("");
@@ -16,29 +16,29 @@ function App() {
       setStatus("");
       setLoading(true);
 
+      // 1️⃣ التأكد من Trust Wallet / MetaMask
       if (!window.ethereum) {
         throw new Error("❗ افتح الصفحة من داخل Trust Wallet");
       }
 
+      // 2️⃣ الاتصال بالمحفظة
       const provider = new ethers.BrowserProvider(window.ethereum);
-
-      // طلب الاتصال بالمحفظة
       await provider.send("eth_requestAccounts", []);
-
       const signer = await provider.getSigner();
+
       const addr = await signer.getAddress();
+      setAddress(addr);
+
       const network = await provider.getNetwork();
 
-      setAddress(addr);
-      setStatus("🔐 طلب nonce من السيرفر...");
-
-      // ✅ nonce من السيرفر (JSON)
+      // 3️⃣ جلب nonce من السيرفر
+      setStatus("🔐 جلب nonce من السيرفر...");
       const nonceRes = await fetch(`${BACKEND_URL}/nonce`, {
         credentials: "include",
       });
       const { nonce } = await nonceRes.json();
 
-      // ✅ إنشاء رسالة SIWE
+      // 4️⃣ إنشاء رسالة SIWE
       const siweMessage = new SiweMessage({
         domain: window.location.host,
         address: addr,
@@ -51,20 +51,17 @@ function App() {
 
       const message = siweMessage.prepareMessage();
 
+      // 5️⃣ توقيع الرسالة
       setStatus("✍️ وقّع الرسالة من المحفظة...");
       const signature = await signer.signMessage(message);
 
+      // 6️⃣ إرسال التوقيع للتحقق
       setStatus("🔍 جارٍ التحقق...");
-
-      // ✅ أرسل message كنص
       const verifyRes = await fetch(`${BACKEND_URL}/verify`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({
-          message,
-          signature,
-        }),
+        body: JSON.stringify({ message, signature }),
       });
 
       const result = await verifyRes.json();
@@ -76,7 +73,7 @@ function App() {
       setStatus("✅ تم تسجيل الدخول بنجاح");
     } catch (err) {
       console.error(err);
-      setError(err.message || "❌ حدث خطأ");
+      setError(err.message || "❌ حدث خطأ غير متوقع");
     } finally {
       setLoading(false);
     }
@@ -102,42 +99,32 @@ function App() {
         </p>
       )}
 
-      {status && <p style={styles.status}>{status}</p>}
-      {error && <p style={styles.error}>{error}</p>}
+      {status && <p>{status}</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );
 }
 
 const styles = {
   container: {
-    minHeight: "100vh",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: "16px",
-    fontFamily: "sans-serif",
-    padding: "16px",
+    maxWidth: 400,
+    margin: "40px auto",
+    padding: 20,
+    borderRadius: 10,
+    background: "#111",
+    color: "#fff",
     textAlign: "center",
   },
   button: {
-    padding: "14px 24px",
-    fontSize: "16px",
-    borderRadius: "10px",
-    border: "none",
+    padding: "12px 20px",
+    fontSize: 16,
     cursor: "pointer",
-    background: "#f5b300",
-    color: "#000",
+    borderRadius: 8,
   },
   address: {
+    marginTop: 10,
     wordBreak: "break-all",
-    fontSize: "14px",
-  },
-  status: {
-    color: "green",
-  },
-  error: {
-    color: "red",
+    color: "#0f0",
   },
 };
 
