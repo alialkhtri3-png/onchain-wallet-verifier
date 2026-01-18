@@ -11,7 +11,6 @@ if ! command -v git-lfs >/dev/null 2>&1; then
 fi
 
 # ----- 2️⃣ إعداد Git LFS لتتبع الملفات الكبيرة -----
-# يمكنك تعديل الامتدادات حسب حاجتك
 git lfs track "*.zip" "*.tgz" "*.bin" "*.mp4" "*.mov"
 git add .gitattributes
 git commit -m "Configure Git LFS for large files" 2>/dev/null || true
@@ -44,14 +43,16 @@ mkdir -p "$BACKUP_DIR"
 # ----- 5️⃣ نسخ احتياطي للملفات المهمة من المشروع الحالي -----
 shopt -s globstar
 
+DEST="$BACKUP_DIR/$(basename $(pwd))"
+mkdir -p "$DEST"
+
 for f in **/*; do
     if [[ -f "$f" && ( "$f" == *.env || "$f" == *.json || "$f" == *.yaml || "$f" == *.yml || "$f" == *.config ) ]]; then
-        DEST="$BACKUP_DIR/$(basename $(pwd))"
-        mkdir -p "$DEST"
         cp -u "$f" "$DEST/"
     fi
 done
 
-echo -e "\e[32m✅ Git LFS مفعل، hook منع الملفات الكبيرة جاهز، وتم نسخ ملفات التكوين إلى $BACKUP_DIR\e[0m"
+echo -e "\e[32m✅ Git LFS مفعل، hook منع الملفات الكبيرة جاهز، وتم نسخ ملفات التكوين إلى $DEST\e[0m"
+
 
 
