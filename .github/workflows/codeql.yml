@@ -1,4 +1,4 @@
-name: CodeQL Smart Analysis
+name: "CodeQL Analysis"
 
 on:
   push:
@@ -6,54 +6,30 @@ on:
   pull_request:
     branches: [ "main" ]
   schedule:
-    - cron: '0 2 * * 0'  # كل أسبوع
+    - cron: '0 0 * * 0'  # كل أسبوع على الأحد
 
 permissions:
   contents: read
   security-events: write
-  packages: read
-  actions: read
 
 jobs:
   analyze:
-    name: Analyze Repository
+    name: CodeQL Analysis
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        language: [ 'javascript', 'typescript' ]  # ضع هنا فقط اللغات الموجودة في مشروعك
+      fail-fast: false
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # اكتشاف لغات المشروع تلقائيًا
-      - name: Detect languages
-        id: detect
-        run: |
-          echo "Detecting languages..."
-          LANGS=""
-          if ls **/*.js **/*.ts 1> /dev/null 2>&1; then
-            LANGS="javascript,typescript"
-          fi
-          if ls **/*.py 1> /dev/null 2>&1; then
-            LANGS="${LANGS},python"
-          fi
-          if ls **/*.cs 1> /dev/null 2>&1; then
-            LANGS="${LANGS},csharp"
-          fi
-          if ls **/*.java **/*.kt 1> /dev/null 2>&1; then
-            LANGS="${LANGS},java,kotlin"
-          fi
-          if ls **/*.cpp **/*.c 1> /dev/null 2>&1; then
-            LANGS="${LANGS},c-cpp"
-          fi
-          echo "Detected languages: $LANGS"
-          echo "languages=$LANGS" >> $GITHUB_OUTPUT
-
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v4
+        uses: github/codeql-action/init@v3
         with:
-          languages: ${{ steps.detect.outputs.languages }}
+          languages: ${{ matrix.language }}
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v4
-
-
-
+        uses: github/codeql-action/analyze@v3
 
