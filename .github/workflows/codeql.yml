@@ -1,4 +1,4 @@
-name: "CodeQL Full Analysis"
+name: CodeQL Smart Analysis
 
 on:
   push:
@@ -6,42 +6,54 @@ on:
   pull_request:
     branches: [ "main" ]
   schedule:
-    - cron: '0 0 * * 0'  # تشغيل أسبوعيًا
+    - cron: '0 2 * * 0'  # كل أسبوع
 
 permissions:
   contents: read
   security-events: write
+  packages: read
+  actions: read
 
 jobs:
   analyze:
-    name: CodeQL Analysis
+    name: Analyze Repository
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        language: [ "javascript", "typescript", "python", "java", "c-cpp", "csharp", "go" ]
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # اكتشاف لغات المشروع تلقائيًا
+      - name: Detect languages
+        id: detect
+        run: |
+          echo "Detecting languages..."
+          LANGS=""
+          if ls **/*.js **/*.ts 1> /dev/null 2>&1; then
+            LANGS="javascript,typescript"
+          fi
+          if ls **/*.py 1> /dev/null 2>&1; then
+            LANGS="${LANGS},python"
+          fi
+          if ls **/*.cs 1> /dev/null 2>&1; then
+            LANGS="${LANGS},csharp"
+          fi
+          if ls **/*.java **/*.kt 1> /dev/null 2>&1; then
+            LANGS="${LANGS},java,kotlin"
+          fi
+          if ls **/*.cpp **/*.c 1> /dev/null 2>&1; then
+            LANGS="${LANGS},c-cpp"
+          fi
+          echo "Detected languages: $LANGS"
+          echo "languages=$LANGS" >> $GITHUB_OUTPUT
+
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v4
         with:
-          languages: ${{ matrix.language }}
-
-      - name: Build project if required
-        if: matrix.language == 'c-cpp' || matrix.language == 'java' || matrix.language == 'csharp' || matrix.language == 'go'
-        run: |
-          echo "Add your build commands here if your language requires compilation"
-          # مثال: 
-          # make
-          # mvn package
-          # dotnet build
-          # go build ./...
+          languages: ${{ steps.detect.outputs.languages }}
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v4
+
 
 
 
