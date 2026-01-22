@@ -6,26 +6,20 @@ on:
   pull_request:
     branches: [ "main" ]
   schedule:
-    - cron: '45 22 * * 4'
+    - cron: '0 0 * * 0'  # أسبوعياً يوم الأحد
 
 permissions:
-  contents: read          # السماح بالوصول لملفات المستودع
-  security-events: write  # السماح للـ workflow بكتابة نتائج CodeQL
-  actions: read           # ضروري لتشغيل الـ workflow بشكل صحيح
-  id-token: write         # مطلوب لبعض الوظائف الحديثة
+  contents: read
+  security-events: write  # مهم لتتبع التنبيهات
+  actions: read           # للوصول إلى الإعدادات الخاصة بالـ Actions
 
 jobs:
   analyze:
-    name: Analyze (${{ matrix.language }})
-    runs-on: ${{ (matrix.language == 'swift' && 'macos-latest') || 'ubuntu-latest' }}
+    name: Analyze CodeQL
+    runs-on: ubuntu-latest
     strategy:
-      fail-fast: false
       matrix:
-        include:
-          - language: 'javascript-typescript'
-            build-mode: 'auto'
-          - language: 'python'
-            build-mode: 'auto'
+        language: [ "javascript", "typescript", "github-actions" ]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -35,18 +29,11 @@ jobs:
         with:
           languages: ${{ matrix.language }}
 
-      - name: Build project (if needed)
-        if: matrix.build-mode == 'manual'
-        run: |
-          echo "Add commands to build your project if required"
+      - name: Autobuild (if needed)
+        uses: github/codeql-action/autobuild@v3
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
-        with:
-          strategy:
-  matrix:
-    include:
-      - language: javascript
-      - language: typescript
+
 
 
