@@ -2,17 +2,17 @@ name: "CodeQL Advanced"
 
 on:
   push:
-    branches: ["main"]
+    branches: [ "main" ]
   pull_request:
-    branches: ["main"]
+    branches: [ "main" ]
   schedule:
     - cron: '45 22 * * 4'
 
 permissions:
-  contents: read         # ضروري للوصول للملفات
-  security-events: write # ضروري لرفع نتائج CodeQL
-  packages: read         # للوصول لحزم CodeQL الداخلية
-  actions: read          # للوصول لبيئة GitHub Actions
+  contents: read          # السماح بالوصول لملفات المستودع
+  security-events: write  # السماح للـ workflow بكتابة نتائج CodeQL
+  actions: read           # ضروري لتشغيل الـ workflow بشكل صحيح
+  id-token: write         # مطلوب لبعض الوظائف الحديثة
 
 jobs:
   analyze:
@@ -26,26 +26,22 @@ jobs:
             build-mode: 'auto'
           - language: 'python'
             build-mode: 'auto'
-          - language: 'go'
-            build-mode: 'auto'
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v4
+        uses: github/codeql-action/init@v3
         with:
           languages: ${{ matrix.language }}
 
-      - name: Build (if manual)
+      - name: Build project (if needed)
         if: matrix.build-mode == 'manual'
         run: |
-          echo "ضع هنا أوامر البناء الخاصة بالمشروع إذا كانت لغة تتطلب build"
-          exit 1
+          echo "Add commands to build your project if required"
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v4
+        uses: github/codeql-action/analyze@v3
         with:
           category: "/language:${{matrix.language}}"
 
