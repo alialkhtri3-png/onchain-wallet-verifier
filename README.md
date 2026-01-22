@@ -425,4 +425,4 @@ Best
 git clone https://github.com/alialkhtri3-png/onchain-wallet-verifier.git
 cd onchain-wallet-verifier
 bash setup-project.sh
-
+![CodeQL](https://github.com/alialkhtri3-png/onchain-wallet-verifier/actions/workflows/codeql.yml/badge.svg)
