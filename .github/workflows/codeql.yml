@@ -1,15 +1,13 @@
-name: "CodeQL Full Scan"
+name: "CodeQL Full Analysis"
 
-# تشغيل الفحص عند كل push و pull request على main
 on:
   push:
-    branches: ["main"]
+    branches: [ "main" ]
   pull_request:
-    branches: ["main"]
+    branches: [ "main" ]
   schedule:
-    - cron: '0 0 * * 0'  # مرة واحدة أسبوعياً
+    - cron: '0 0 * * 0'  # تشغيل أسبوعيًا
 
-# أذونات مطلوبة لتجنب خطأ "Resource not accessible by integration"
 permissions:
   contents: read
   security-events: write
@@ -20,30 +18,28 @@ jobs:
     runs-on: ubuntu-latest
 
     strategy:
-      fail-fast: false
       matrix:
-        language: [ 'javascript', 'typescript', 'python', 'c-cpp', 'java', 'csharp', 'go' ]
+        language: [ "javascript", "typescript", "python", "java", "c-cpp", "csharp", "go" ]
 
     steps:
-      # خطوة 1: استنساخ المستودع
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # خطوة 2: تهيئة CodeQL لكل لغة في المصفوفة
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v4
         with:
           languages: ${{ matrix.language }}
-          # build-mode تلقائي، يستخدم إن وُجد
-          # build-mode: 'automatic'
 
-      # خطوة 3: بناء المشروع (اختياري لبعض اللغات)
-      - name: Build project (optional)
+      - name: Build project if required
         if: matrix.language == 'c-cpp' || matrix.language == 'java' || matrix.language == 'csharp' || matrix.language == 'go'
         run: |
-          echo "Add build commands here if needed"
+          echo "Add your build commands here if your language requires compilation"
+          # مثال: 
+          # make
+          # mvn package
+          # dotnet build
+          # go build ./...
 
-      # خطوة 4: تشغيل تحليل CodeQL
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v4
 
