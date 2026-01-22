@@ -1,4 +1,8 @@
-name: "CodeQL Advanced"
+
+- name: Initialize CodeQL
+  uses: github/codeql-action/init@v4
+  with:
+    languages: javascript, typescript
 
 on:
   push:
