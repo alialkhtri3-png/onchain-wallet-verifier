@@ -395,3 +395,34 @@ they just need to know who owns the wallet.
 نسخ التعليمات البرمجية
 
 https://github.com/alialkhtri3-png/onchain-wallet-verifier
+# Onchain Wallet Verifier
+Hi 👋, 
+
+I have a ready-to-use **Onchain Wallet Verifier** tool for your Web3 project.
+
+✅ Easy integration  
+✅ Secure & reliable  
+✅ Node.js & Frontend ready  
+
+You can try it via Demo: <Insert Demo Link Here>  
+
+💰 Payment via ETH/USDC: 0x8F45A292C866A73C1408A77FA0e9FA6235BfC41C  
+
+Contact me if you want integration or custom support.  
+
+Best
+🔹 **ما هذا المشروع؟**  
+أداة جاهزة للتحقق من Wallets في مشاريع Web3.  
+✅ سريعة، آمنة، سهلة الدمج  
+
+🔹 **المميزات:**  
+- Verify wallets for dApps & smart contracts  
+- CLI and scripts ready to use  
+- Supports Node.js & Frontend integrations  
+
+🔹 **كيفية التثبيت:**  
+```bash
+git clone https://github.com/alialkhtri3-png/onchain-wallet-verifier.git
+cd onchain-wallet-verifier
+bash setup-project.sh
+
