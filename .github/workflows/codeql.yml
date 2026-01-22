@@ -1,6 +1,6 @@
 permissions:
-  contents: read
-  security-events: write
+  contents: read       # للوصول لملفات المستودع
+  security-events: write   # لتفعيل CodeQL وتحميل النتائج
 
 name: "CodeQL Security Scan"
 
