@@ -1,8 +1,4 @@
-
-- name: Initialize CodeQL
-  uses: github/codeql-action/init@v4
-  with:
-    languages: javascript, typescript
+name: "CodeQL Full Scan"
 
 on:
   push:
@@ -10,34 +6,38 @@ on:
   pull_request:
     branches: [ "main" ]
   schedule:
-    - cron: '0 0 * * 0'  # أسبوعياً يوم الأحد
+    - cron: '0 2 * * 0' # مرة أسبوعياً
 
 permissions:
   contents: read
-  security-events: write  # مهم لتتبع التنبيهات
-  actions: read           # للوصول إلى الإعدادات الخاصة بالـ Actions
+  security-events: write
+  actions: read
+  id-token: write
 
 jobs:
   analyze:
-    name: Analyze CodeQL
+    name: Analyze (${{ matrix.language }})
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        language: [ "javascript", "typescript", "github-actions" ]
+        language: [javascript, typescript, python, cpp, java, csharp, go, kotlin]
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
+        uses: github/codeql-action/init@v4
         with:
           languages: ${{ matrix.language }}
 
-      - name: Autobuild (if needed)
-        uses: github/codeql-action/autobuild@v3
+      # بناء الكود إذا لزم الأمر (يمكن إضافة خطوات خاصة بلغة معينة هنا)
+      - name: Build project (if required)
+        run: echo "Add build steps here if your project needs compilation"
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
+        uses: github/codeql-action/analyze@v4
 
 
 
