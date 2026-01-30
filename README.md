@@ -426,3 +426,42 @@ git clone https://github.com/alialkhtri3-png/onchain-wallet-verifier.git
 cd onchain-wallet-verifier
 bash setup-project.sh
 ![CodeQL](https://github.com/alialkhtri3-png/onchain-wallet-verifier/actions/workflows/codeql.yml/badge.svg)
+name: "CodeQL Analysis"
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  analyze:
+    name: Analyze code with CodeQL
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'javascript', 'typescript' ]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: ${{ matrix.language }}
+
+      - name: Install frontend dependencies
+        working-directory: ./frontend
+        run: npm install || true
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v4
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v4
