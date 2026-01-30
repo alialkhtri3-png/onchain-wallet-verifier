@@ -10,14 +10,20 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@rainbow-me/rainbowkit": "^2.2.10",
     "@walletconnect/ethereum-provider": "^2.23.1",
     "ethers": "^6.16.0",
     "express-session": "^1.18.2",
+    "graphql-ws": "^6.0.6",
     "keccak256": "^1.0.6",
     "merkletreejs": "^0.6.0",
+    "node-fetch": "^3.3.2",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "siwe": "^3.0.0"
+    "siwe": "^3.0.0",
+    "viem": "^2.44.4",
+    "wagmi": "^3.4.1",
+    "ws": "^8.19.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",

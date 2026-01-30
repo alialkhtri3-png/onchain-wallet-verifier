@@ -15,6 +15,12 @@ build/
 frontend/node_modules/
 frontend/dist/
 
+# Local binaries (IMPORTANT)
+frontend/ngrok
+frontend/ngrok*
+*.zip
+*.tar.gz
+
 # OS
 .DS_Store
 
